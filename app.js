@@ -190,7 +190,9 @@
     if (event.dataTransfer.types.includes("Files")) event.preventDefault();
   });
   form.addEventListener("change", (event) => {
-    if (event.target.name !== "environment") return;
+    if (!["environment", "legendsPack"].includes(event.target.name)) return;
+    if (event.target.name === "legendsPack")
+      form.elements.legendsPackVersion.value = "";
     const other = form.elements.environment.value === "other";
     $("#other-environment-field").hidden = !other;
     form.elements.environmentOther.required = other;
@@ -198,6 +200,12 @@
     $("#legends-pack-field").hidden = !legends;
     form.elements.legendsPack.required = legends;
     form.elements.legendsPack.disabled = !legends;
+    const needsPackVersion =
+      legends &&
+      ["星恒整合包", "shs整合包"].includes(form.elements.legendsPack.value);
+    $("#legends-pack-version-field").hidden = !needsPackVersion;
+    form.elements.legendsPackVersion.required = needsPackVersion;
+    form.elements.legendsPackVersion.disabled = !needsPackVersion;
   });
   $("#description").addEventListener("input", (event) => {
     $("#description-count").textContent = `${event.target.value.length} / 8000`;
@@ -235,6 +243,8 @@
       fields.environmentOther = form.elements.environmentOther.value.trim();
     if (fields.environment === "legends")
       fields.legendsPack = form.elements.legendsPack.value.trim();
+    if (!form.elements.legendsPackVersion.disabled)
+      fields.legendsPackVersion = form.elements.legendsPackVersion.value.trim();
     if (noLog.checked) fields.noLog = "on";
     for (const [name, value] of Object.entries(fields)) {
       if (!value) {

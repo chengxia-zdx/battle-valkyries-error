@@ -68,6 +68,9 @@
       ...(fields.environment === "legends" && fields.legendsPack
         ? [`传奇版本 / 整合包 / Legends pack: ${fields.legendsPack}`]
         : []),
+      ...(fields.environment === "legends" && fields.legendsPackVersion
+        ? [`整合包版本 / Modpack version: ${fields.legendsPackVersion}`]
+        : []),
       `女武神 Mod 版本 / Battle Valkyries version: ${fields.valkyriesVersion}`,
       `附魔 Mod 版本 / Enchantment mod version: ${fields.enchantmentVersion}`,
       "",

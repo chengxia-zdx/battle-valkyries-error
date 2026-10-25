@@ -83,6 +83,36 @@ test("each Legends pack is included in both text and JSON reports", () => {
     );
   }
 });
+test("modpack versions are included in both text and JSON reports", () => {
+  for (const legendsPack of ["星恒整合包", "shs整合包"]) {
+    const { entries, report } = buildReport(
+      {
+        ...fields,
+        environment: "legends",
+        legendsPack,
+        legendsPackVersion: "v2.3.1",
+      },
+      null,
+      [],
+      pack,
+    );
+    assert.ok(
+      entries[0].content.includes("整合包版本 / Modpack version: v2.3.1"),
+    );
+    assert.equal(report.fields.legendsPackVersion, "v2.3.1");
+    assert.equal(
+      JSON.parse(entries[1].content).fields.legendsPackVersion,
+      "v2.3.1",
+    );
+  }
+  const { entries } = buildReport(
+    { ...fields, environment: "legends", legendsPack: "纯原版传奇" },
+    null,
+    [],
+    pack,
+  );
+  assert.ok(!entries[0].content.includes("Modpack version:"));
+});
 test("ZIP preserves Unicode paths, original file bytes, CRC and matching metadata", async () => {
   const created = new Date("2026-10-25T10:20:30Z");
   const log = new File(
