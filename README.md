@@ -26,3 +26,18 @@ npm test
 ```
 
 测试覆盖附件限制、缺失日志处理、反馈元数据及 ZIP 中文文件名、原始字节和 CRC。页面可直接托管到静态站点。图标来自 Wiki 的现有素材。
+
+## GitHub Pages
+
+本项目已经支持 GitHub Pages，页面、脚本和素材均使用相对路径，兼容仓库子路径 `/battle-valkyries-error/`。无需安装依赖或构建前端。
+
+首次启用时，在仓库 **Settings → Pages → Build and deployment → Source** 选择 **GitHub Actions**：
+
+- [打开 Pages 设置](https://github.com/chengxia-zdx/battle-valkyries-error/settings/pages)
+- [查看 Deploy GitHub Pages 工作流](https://github.com/chengxia-zdx/battle-valkyries-error/actions/workflows/pages.yml)
+
+然后在工作流页面点击 **Run workflow**，或向 `main` 推送一次更新。之后每次推送会自动运行 JavaScript 检查和反馈包测试；通过后仅发布网页文件与素材，测试工具、本地预览服务和开发产物不进入站点。`.nojekyll` 禁用 Jekyll 处理。
+
+部署成功后的访问地址：[https://chengxia-zdx.github.io/battle-valkyries-error/](https://chengxia-zdx.github.io/battle-valkyries-error/)。启用前或部署完成前，该地址可能返回 404。
+
+线上页面同样只在玩家浏览器中整理文件，不需要配置后端或 Token；反馈包仍需玩家自行通过 QQ 发给作者。
