@@ -9,7 +9,8 @@
     status = $("#form-status"),
     downloadButton = $("#download-button");
   const dialog = $("#success-dialog");
-  const { validateFiles, buildReport } = window.BV_FEEDBACK_MODEL;
+  const { validateFiles, buildReport, feedbackGroup } =
+    window.BV_FEEDBACK_MODEL;
   let log = null,
     images = [],
     busy = false,
@@ -228,6 +229,23 @@
     anchor.click();
     anchor.remove();
   }
+  document.querySelectorAll("[data-copy-group]").forEach((button) => {
+    button.addEventListener("click", async () => {
+      const message = button
+        .closest(".group-contact")
+        .querySelector(".group-copy-status");
+      try {
+        await navigator.clipboard.writeText(feedbackGroup.number);
+        message.textContent = "群号已复制，打开 QQ 搜索群号即可。";
+      } catch {
+        message.textContent = `请手动复制群号：${feedbackGroup.number}。`;
+      }
+    });
+  });
+  $("#dialog-group-link").addEventListener("click", () => {
+    $("#group-qr-details").open = true;
+    dialog.close();
+  });
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
     if (busy) return;
@@ -288,7 +306,7 @@
       downloadName = filename;
       triggerDownload();
       $("#download-name").textContent = filename;
-      status.textContent = "反馈包已生成，请将下载的 ZIP 通过 QQ 发给作者。";
+      status.textContent = `反馈包已生成，请加入“${feedbackGroup.name}”（${feedbackGroup.number}），联系作者发送 ZIP。`;
       dialog.showModal();
     } catch (error) {
       console.error("Failed to generate feedback package", error);

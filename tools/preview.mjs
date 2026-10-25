@@ -11,6 +11,7 @@ const types = {
   ".css": "text/css; charset=utf-8",
   ".js": "text/javascript; charset=utf-8",
   ".png": "image/png",
+  ".jpg": "image/jpeg",
 };
 const publicFiles = new Set([
   "index.html",
@@ -19,6 +20,7 @@ const publicFiles = new Set([
   "feedback-pack.js",
   "feedback-model.js",
   "assets/valkyries_hub_icon.png",
+  "assets/qq-group-583558357.jpg",
 ]);
 if (
   !Number.isInteger(requestedPort) ||

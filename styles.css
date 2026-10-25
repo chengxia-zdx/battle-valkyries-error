@@ -1917,6 +1917,131 @@ dialog .primary-button svg:last-child {
   font-size: 16px;
   white-space: nowrap;
 }
+.qq-group-card {
+  scroll-margin-top: 24px;
+}
+.group-name {
+  margin: 14px 0 12px;
+  color: #4e6747;
+  font-size: 15px;
+  font-weight: 500;
+}
+.group-number-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 9px;
+  flex-wrap: wrap;
+}
+.group-number-row > span {
+  font-size: 11px;
+  color: #8a987c;
+}
+.group-number-row strong {
+  font:
+    500 18px/1.5 Consolas,
+    monospace;
+  color: #566e49;
+  margin-left: 5px;
+  letter-spacing: 0.5px;
+}
+.copy-group-button {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  border: 1px solid #dce5d1;
+  border-radius: 4px;
+  background: #f2f6ec;
+  color: #6b8058;
+  padding: 6px 8px;
+  font-size: 11px;
+}
+.copy-group-button:hover {
+  background: #e9f0e0;
+  border-color: #9ead8a;
+}
+.copy-group-button svg {
+  width: 12px;
+  height: 12px;
+}
+.group-copy-status {
+  margin: 7px 0 0;
+  color: #7d9169;
+  font-size: 11px;
+}
+.group-copy-status:empty {
+  display: none;
+}
+.group-instructions {
+  font-size: 12px;
+  color: #89967b;
+  line-height: 1.9;
+  margin: 14px 0;
+}
+.group-qr-details {
+  border-top: 1px solid var(--line);
+  padding-top: 12px;
+}
+.group-qr-details summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  list-style: none;
+  color: #6e8459;
+  font-size: 12px;
+  cursor: pointer;
+}
+.group-qr-details summary::-webkit-details-marker {
+  display: none;
+}
+.group-qr-details[open] summary span {
+  transform: rotate(45deg);
+}
+.group-qr-details a {
+  display: block;
+  margin-top: 12px;
+}
+.group-qr-details img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+}
+.group-qr-details small {
+  display: block;
+  font-size: 11px;
+  line-height: 1.8;
+  margin-top: 8px;
+  color: #9aa68c;
+}
+.submit-destination {
+  font-size: 11px;
+  color: #8a977b;
+  margin: 13px 0 0;
+  line-height: 1.9;
+}
+.submit-destination a,
+.delivery-group-link,
+.dialog-group-link {
+  color: #657e50;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.dialog-delivery .group-contact {
+  margin-top: 12px;
+}
+.dialog-delivery .group-number-row strong {
+  font-size: 17px;
+}
+.dialog-delivery .group-copy-status {
+  font-size: 11px;
+}
+.dialog-group-link {
+  display: inline-block;
+  margin-top: 12px;
+  font-size: 12px;
+}
 .field input[type="text"],
 .field textarea {
   font-size: 14px;

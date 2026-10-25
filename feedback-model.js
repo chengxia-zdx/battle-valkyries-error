@@ -2,6 +2,7 @@
   "use strict";
   const MAX_FILE = 25 * 1024 * 1024;
   const MAX_TOTAL = 50 * 1024 * 1024;
+  const feedbackGroup = { name: "战场女武神 mod 群", number: "583558357" };
   const environments = {
     vanilla: "原版 / Vanilla",
     legends: "传奇 / Legends",
@@ -53,6 +54,11 @@
       logProvided: !!log,
       files,
       source: "battle-valkyries-error",
+      delivery: {
+        platform: "QQ",
+        groupName: feedbackGroup.name,
+        groupNumber: feedbackGroup.number,
+      },
     };
     const environment =
       fields.environment === "other"
@@ -79,8 +85,10 @@
       "附件 / Attachments:",
       ...files.map((file) => `${file.path} (${file.bytes} bytes)`),
       "",
-      "请将整个 ZIP 通过 QQ 发送给作者。本页面没有自动发送反馈。",
-      "Send this complete ZIP to the author via QQ. This page has not sent it automatically.",
+      `反馈 QQ 群 / QQ group: ${feedbackGroup.name}`,
+      `群号 / Group number: ${feedbackGroup.number}`,
+      "请加入上述 QQ 群，在群内联系作者，通过“发送文件”发送整个 ZIP。本页面没有自动发送反馈。",
+      `Join QQ group ${feedbackGroup.number}, contact the author, and send this complete ZIP as a file. This page has not sent it automatically.`,
     ].join("\r\n");
     entries.unshift(
       { name: "反馈说明.txt", content: `\ufeff${text}` },
@@ -95,7 +103,7 @@
         .replace(/\.\d+Z$/, "Z")}.zip`,
     };
   }
-  const api = { validateFiles, buildReport };
+  const api = { validateFiles, buildReport, feedbackGroup };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   else root.BV_FEEDBACK_MODEL = api;
 })(typeof window === "undefined" ? globalThis : window);

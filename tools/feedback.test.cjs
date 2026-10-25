@@ -83,6 +83,18 @@ test("each Legends pack is included in both text and JSON reports", () => {
     );
   }
 });
+test("feedback packages identify the QQ group and delivery instructions", () => {
+  const { entries, report } = buildReport(fields, null, [], pack);
+  assert.deepEqual(report.delivery, {
+    platform: "QQ",
+    groupName: "战场女武神 mod 群",
+    groupNumber: "583558357",
+  });
+  assert.ok(entries[0].content.includes("战场女武神 mod 群"));
+  assert.ok(entries[0].content.includes("群号 / Group number: 583558357"));
+  assert.ok(entries[0].content.includes("在群内联系作者"));
+  assert.deepEqual(JSON.parse(entries[1].content).delivery, report.delivery);
+});
 test("modpack versions are included in both text and JSON reports", () => {
   for (const legendsPack of ["星恒整合包", "shs整合包"]) {
     const { entries, report } = buildReport(

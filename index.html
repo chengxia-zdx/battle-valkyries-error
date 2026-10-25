@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="Battle Valkyries 错误反馈：整理问题、日志与截图，在本地生成反馈包，通过 QQ 发给作者。"
+      content="Battle Valkyries 错误反馈：整理问题、日志与截图，下载反馈包后加入战场女武神 mod 群（583558357），联系作者发送反馈。"
     />
     <meta name="theme-color" content="#1e2b28" />
     <title>错误反馈 · Battle Valkyries</title>
@@ -160,7 +160,7 @@
           <div>
             <span class="workflow-number">03</span
             ><span
-              ><strong>下载并发送</strong><small>通过 QQ 发给作者</small></span
+              ><strong>下载并发送</strong><small>前往反馈 QQ 群</small></span
             >
           </div>
           <span class="workflow-local"
@@ -399,9 +399,64 @@
                 ><span>生成并下载反馈包</span><svg><use href="#i-arrow" /></svg>
               </button>
               <p id="form-status" role="status" aria-live="polite"></p>
+              <p class="submit-destination">
+                下载后前往
+                <a href="#qq-group">战场女武神 mod 群 · 583558357</a
+                >，联系作者发送反馈包。
+              </p>
             </div>
           </form>
           <aside class="help-column" aria-label="反馈帮助">
+            <section
+              class="help-card qq-group-card"
+              id="qq-group"
+              aria-labelledby="qq-group-title"
+            >
+              <div class="card-heading">
+                <span class="card-icon"
+                  ><svg><use href="#i-report" /></svg
+                ></span>
+                <h2 id="qq-group-title">反馈 QQ 群</h2>
+              </div>
+              <p class="group-name">战场女武神 mod 群</p>
+              <div class="group-contact">
+                <div class="group-number-row">
+                  <span>群号 <strong>583558357</strong></span
+                  ><button
+                    type="button"
+                    class="copy-group-button"
+                    data-copy-group
+                    aria-label="复制 QQ 群号 583558357"
+                  >
+                    <svg><use href="#i-copy" /></svg>复制群号
+                  </button>
+                </div>
+                <p class="group-copy-status" role="status"></p>
+              </div>
+              <p class="group-instructions">
+                在 QQ
+                中搜索群号，或扫描下方二维码加入群聊。入群后联系作者，使用“发送文件”发送整个
+                ZIP 反馈包。
+              </p>
+              <details class="group-qr-details" id="group-qr-details">
+                <summary>查看入群二维码 <span>+</span></summary>
+                <a
+                  href="assets/qq-group-583558357.jpg"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="打开战场女武神 mod 群入群二维码原图"
+                  ><img
+                    src="assets/qq-group-583558357.jpg"
+                    alt="战场女武神 mod 群入群二维码，群号 583558357"
+                    width="1152"
+                    height="2048"
+                    loading="lazy" /></a
+                ><small
+                  >用 QQ
+                  扫一扫；点击图片可查看原图。二维码失效时可搜索群号入群。</small
+                >
+              </details>
+            </section>
             <section class="help-card log-guide" id="log-guide">
               <div class="card-heading">
                 <span class="card-icon"
@@ -510,8 +565,9 @@
               <div class="delivery-symbol" aria-hidden="true">↗</div>
               <h2>最后一步，记得发送</h2>
               <p>
-                下载完成后，请在 QQ 中使用<strong>“发送文件”</strong>，将整个
-                ZIP 发给作者。
+                下载完成后，加入<a class="delivery-group-link" href="#qq-group"
+                  >战场女武神 mod 群（583558357）</a
+                >，在群内联系作者，使用<strong>“发送文件”</strong>发送整个 ZIP。
               </p>
               <span>本页面不会替你发送反馈。</span>
             </section>
@@ -542,7 +598,27 @@
       <div id="download-name" class="download-name"></div>
       <div class="dialog-delivery">
         <strong>还差最后一步</strong>
-        <p>打开 QQ，通过“发送文件”把整个 ZIP 发给作者，反馈才算送达。</p>
+        <p>
+          加入“战场女武神 mod 群”，联系作者，通过“发送文件”把整个 ZIP
+          发给作者，反馈才算送达。
+        </p>
+        <div class="group-contact">
+          <div class="group-number-row">
+            <span>群号 <strong>583558357</strong></span
+            ><button
+              type="button"
+              class="copy-group-button"
+              data-copy-group
+              aria-label="复制 QQ 群号 583558357"
+            >
+              <svg><use href="#i-copy" /></svg>复制群号
+            </button>
+          </div>
+          <p class="group-copy-status" role="status"></p>
+        </div>
+        <a href="#qq-group" class="dialog-group-link" id="dialog-group-link"
+          >查看入群二维码 →</a
+        >
       </div>
       <button class="primary-button" id="finish-button" type="button">
         知道了，去 QQ 发送<svg><use href="#i-arrow" /></svg></button
