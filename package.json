@@ -1,0 +1,12 @@
+{
+  "name": "battle-valkyries-error",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Battle Valkyries 本地错误反馈工具",
+  "scripts": {
+    "dev": "node tools/preview.mjs",
+    "preview": "node tools/preview.mjs",
+    "check": "node --check app.js && node --check feedback-model.js && node --check feedback-pack.js && node --check tools/preview.mjs",
+    "test": "node --test tools/feedback.test.cjs"
+  }
+}
