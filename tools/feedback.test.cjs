@@ -2,7 +2,11 @@ const { test } = require("node:test");
 const assert = require("node:assert/strict");
 const { File } = require("node:buffer");
 const pack = require("../feedback-pack.js");
-const { validateFiles, buildReport } = require("../feedback-model.js");
+const {
+  validateFiles,
+  validateAttachments,
+  buildReport,
+} = require("../feedback-model.js");
 const mb = 1024 * 1024;
 const fields = {
   description: "提交材料后卡住\n操作：与角色交谈",
@@ -12,10 +16,12 @@ const fields = {
   enchantmentVersion: "未安装",
 };
 const file = (name, size) => ({ name, size });
+const validLog = new File(["<html>游戏日志</html>"], "log.html");
 
-test("requires a log unless the player explicitly opts out", () => {
-  assert.match(validateFiles(null, []), /请添加游戏日志/);
-  assert.equal(validateFiles(null, [], true), "");
+test("requires a log even when the old opt-out argument is supplied", () => {
+  assert.match(validateFiles(null, []), /未提供日志无法生成反馈包/);
+  assert.match(validateFiles(null, [], true), /未提供日志无法生成反馈包/);
+  assert.match(validateFiles(null, [file("a.png", 1)]), /未提供日志/);
   for (const extension of ["html", "htm", "log", "TXT"])
     assert.equal(validateFiles(file(`log.${extension}`, 1), []), "");
   assert.match(validateFiles(file("log.html.exe", 1), []), /日志仅支持/);
@@ -34,36 +40,49 @@ test("validates image count, extensions, emptiness and size boundaries", () => {
     /50 MB/,
   );
   assert.match(
-    validateFiles(
+    validateAttachments(
       null,
       Array.from({ length: 6 }, () => file("a.png", 1)),
-      true,
     ),
     /最多添加 5 张/,
   );
-  assert.match(validateFiles(null, [file("a.svg", 1)], true), /截图仅支持/);
-  assert.match(validateFiles(null, [file("a.png", 0)], true), /空文件/);
+  assert.match(validateAttachments(null, [file("a.svg", 1)]), /截图仅支持/);
+  assert.match(validateAttachments(null, [file("a.png", 0)]), /空文件/);
   assert.equal(
-    validateFiles(
+    validateAttachments(
       null,
       [file("a.PNG", 1), file("b.jpeg", 1), file("c.webp", 1)],
-      true,
     ),
     "",
   );
 });
-test("reports a missing log explicitly without inventing wiki snapshot or installed versions", () => {
+test("refuses to build a report without a log, including legacy opt-out fields", () => {
+  for (const reportFields of [fields, { ...fields, noLog: "on" }]) {
+    for (const images of [[], [file("a.png", 1)]]) {
+      assert.throws(
+        () => buildReport(reportFields, null, images, pack),
+        /未提供日志无法生成反馈包/,
+      );
+    }
+  }
+});
+test("refuses to build a report with an invalid or empty log", () => {
+  for (const log of [file("log.html.exe", 1), file("log.html", 0)]) {
+    assert.throws(() => buildReport(fields, log, [], pack), /日志仅支持|空文件/);
+  }
+});
+test("reports the supplied log and player-entered installed versions", () => {
   const { report, entries } = buildReport(
-    { ...fields, noLog: "on" },
-    null,
+    fields,
+    validLog,
     [],
     pack,
   );
   assert.equal(report.formatVersion, 2);
-  assert.equal(report.logProvided, false);
-  assert.deepEqual(report.files, []);
+  assert.equal(report.logProvided, true);
+  assert.equal(report.files[0].path, "log/log.html");
   assert.equal(report.fields.valkyriesVersion, "不清楚");
-  assert.match(entries[0].content, /未提供 \/ missing/);
+  assert.match(entries[0].content, /日志 \/ Log: log.html/);
   assert.match(entries[0].content, /自定义环境/);
   assert.match(entries[0].content, /本页面没有自动发送反馈/);
 });
@@ -71,7 +90,7 @@ test("each Legends pack is included in both text and JSON reports", () => {
   for (const legendsPack of ["纯原版传奇", "星恒整合包", "shs整合包"]) {
     const { entries, report } = buildReport(
       { ...fields, environment: "legends", legendsPack },
-      null,
+      validLog,
       [],
       pack,
     );
@@ -84,7 +103,7 @@ test("each Legends pack is included in both text and JSON reports", () => {
   }
 });
 test("feedback packages identify the QQ group and delivery instructions", () => {
-  const { entries, report } = buildReport(fields, null, [], pack);
+  const { entries, report } = buildReport(fields, validLog, [], pack);
   assert.deepEqual(report.delivery, {
     platform: "QQ",
     groupName: "战场女武神 mod 群",
@@ -104,7 +123,7 @@ test("modpack versions are included in both text and JSON reports", () => {
         legendsPack,
         legendsPackVersion: "v2.3.1",
       },
-      null,
+      validLog,
       [],
       pack,
     );
@@ -119,7 +138,7 @@ test("modpack versions are included in both text and JSON reports", () => {
   }
   const { entries } = buildReport(
     { ...fields, environment: "legends", legendsPack: "纯原版传奇" },
-    null,
+    validLog,
     [],
     pack,
   );

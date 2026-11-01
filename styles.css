@@ -680,25 +680,6 @@ textarea {
   font-size: 11px;
   color: #a3ad95;
 }
-.log-dropzone.disabled {
-  opacity: 0.45;
-  pointer-events: none;
-}
-.checkbox-label {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  margin-top: 13px;
-  font-size: 12px;
-  color: #8b9580;
-  cursor: pointer;
-}
-.checkbox-label input {
-  accent-color: #607c51;
-  width: 13px;
-  height: 13px;
-  margin: 0;
-}
 .screenshot-heading {
   margin-top: 24px;
 }

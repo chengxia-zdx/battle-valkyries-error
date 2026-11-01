@@ -9,9 +9,13 @@
     reforged: "重铸 / Reforged",
   };
 
-  function validateFiles(log, images, allowMissing = false) {
-    if (!log && !allowMissing)
-      return "请添加游戏日志，或勾选“暂时找不到日志”。";
+  function validateFiles(log, images) {
+    if (!log) return "请先添加游戏日志 log.html，未提供日志无法生成反馈包。";
+    return validateAttachments(log, images);
+  }
+
+  // Attachments may be selected in any order; generation always requires a log.
+  function validateAttachments(log, images) {
     if (log && !/\.(html?|log|txt)$/i.test(log.name))
       return "日志仅支持 HTML、HTM、LOG 或 TXT 文件。";
     if (images.length > 5) return "最多添加 5 张图片，请移除部分图片后重试。";
@@ -28,12 +32,13 @@
   }
 
   function buildReport(fields, log, images, pack, created = new Date()) {
+    const error = validateFiles(log, images);
+    if (error) throw new Error(error);
     const entries = [];
-    if (log)
-      entries.push({
-        name: `log/${pack.safeFilename(log.name)}`,
-        content: log,
-      });
+    entries.push({
+      name: `log/${pack.safeFilename(log.name)}`,
+      content: log,
+    });
     images.forEach((file, index) =>
       entries.push({
         name: `images/${String(index + 1).padStart(2, "0")}-${pack.safeFilename(file.name)}`,
@@ -80,7 +85,7 @@
       `女武神 Mod 版本 / Battle Valkyries version: ${fields.valkyriesVersion}`,
       `附魔 Mod 版本 / Enchantment mod version: ${fields.enchantmentVersion}`,
       "",
-      `日志 / Log: ${log ? log.name : "未提供 / missing（玩家暂时找不到日志）"}`,
+      `日志 / Log: ${log.name}`,
       "",
       "附件 / Attachments:",
       ...files.map((file) => `${file.path} (${file.bytes} bytes)`),
@@ -103,7 +108,7 @@
         .replace(/\.\d+Z$/, "Z")}.zip`,
     };
   }
-  const api = { validateFiles, buildReport, feedbackGroup };
+  const api = { validateFiles, validateAttachments, buildReport, feedbackGroup };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   else root.BV_FEEDBACK_MODEL = api;
 })(typeof window === "undefined" ? globalThis : window);

@@ -317,7 +317,7 @@
             <fieldset class="form-section attachments-section">
               <legend><span class="section-number">03</span> 日志与截图</legend>
               <p class="section-description">
-                原始日志是定位问题的重要线索，请尽量提供。
+                必须添加游戏原始日志，未提供日志无法生成反馈包。
               </p>
               <div class="attachment-heading">
                 <label for="log-file"
@@ -334,6 +334,7 @@
                   id="log-file"
                   type="file"
                   accept=".html,.htm,.log,.txt"
+                  aria-required="true"
                   aria-describedby="log-hint"
                 /><span class="upload-icon"
                   ><svg><use href="#i-upload" /></svg></span
@@ -346,11 +347,6 @@
                 ></label
               >
               <div id="log-list" class="file-list"></div>
-              <label class="checkbox-label"
-                ><input id="no-log" type="checkbox" name="noLog" /><span
-                  >暂时找不到日志，先生成反馈包</span
-                ></label
-              >
               <div class="screenshot-heading">
                 <label for="screenshot-files"
                   >截图 / Mod 列表图片 <span class="optional">选填</span></label
@@ -519,7 +515,7 @@
                 <p>
                   请确认游戏至少启动过一次。日志通常不在 Steam
                   安装目录；如果“文档”由 OneDrive
-                  管理，上面的命令也会打开实际位置。手机无法直接读取电脑日志，你可以先勾选“暂时找不到日志”。
+                  管理，上面的命令也会打开实际位置。手机无法直接读取电脑日志，请在电脑上找到并添加日志后再生成反馈包。
                 </p>
               </details>
             </section>
@@ -544,7 +540,7 @@
                 <li>
                   <svg><use href="#i-file" /></svg
                   ><span id="package-log"
-                    >游戏原始日志<small>等待添加</small></span
+                    >游戏原始日志<small>等待添加 · 必填</small></span
                   ><span id="log-state" class="pending-dot"></span>
                 </li>
                 <li>

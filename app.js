@@ -3,13 +3,12 @@
   const $ = (selector) => document.querySelector(selector);
   const form = $("#report-form");
   const logInput = $("#log-file"),
-    imageInput = $("#screenshot-files"),
-    noLog = $("#no-log");
+    imageInput = $("#screenshot-files");
   const errorElement = $("#attachment-error"),
     status = $("#form-status"),
     downloadButton = $("#download-button");
   const dialog = $("#success-dialog");
-  const { validateFiles, buildReport, feedbackGroup } =
+  const { validateFiles, validateAttachments, buildReport, feedbackGroup } =
     window.BV_FEEDBACK_MODEL;
   let log = null,
     images = [],
@@ -17,9 +16,8 @@
     thumbnailUrls = [],
     downloadUrl = "",
     downloadName = "";
-  const activeLog = () => (noLog.checked ? null : log);
   const totalBytes = () =>
-    [activeLog(), ...images]
+    [log, ...images]
       .filter(Boolean)
       .reduce((sum, file) => sum + file.size, 0);
   const sizeLabel = (bytes) =>
@@ -63,7 +61,7 @@
       imageList = $("#image-list");
     logList.replaceChildren();
     imageList.replaceChildren();
-    if (activeLog()) {
+    if (log) {
       const row = document.createElement("div"),
         info = document.createElement("span"),
         name = document.createElement("strong"),
@@ -111,32 +109,28 @@
       : "尚未添加 · 选填";
     const packageLog = $("#package-log"),
       detail = document.createElement("small");
-    packageLog.textContent = noLog.checked ? "未提供游戏日志" : "游戏原始日志";
-    detail.textContent = noLog.checked
-      ? "将在反馈说明中标记缺失"
-      : log
-        ? `${log.name} · ${sizeLabel(log.size)}`
-        : "等待添加";
+    packageLog.textContent = "游戏原始日志";
+    detail.textContent = log
+      ? `${log.name} · ${sizeLabel(log.size)}`
+      : "等待添加 · 必填";
     packageLog.append(detail);
-    $("#log-state").classList.toggle("ready", !!activeLog());
+    $("#log-state").classList.toggle("ready", !!log);
     const total = $("#total-size"),
       limit = document.createElement("span");
     total.textContent = `${totalBytes() ? (totalBytes() / 1024 / 1024).toFixed(2) : "0"} MB `;
     limit.textContent = "/ 50 MB";
     total.append(limit);
-    logInput.disabled = noLog.checked || busy;
-    $("#log-dropzone").classList.toggle("disabled", noLog.checked);
+    logInput.disabled = busy;
   }
   function addFiles(kind, files) {
     if (busy || !files.length) return;
-    if (kind === "log" && noLog.checked) return;
     if (kind === "log" && files.length > 1) {
       showError("每次请选择一个游戏日志文件。");
       return;
     }
-    const nextLog = kind === "log" ? files[0] : activeLog();
+    const nextLog = kind === "log" ? files[0] : log;
     const nextImages = kind === "images" ? [...images, ...files] : images;
-    const error = validateFiles(nextLog, nextImages, true);
+    const error = validateAttachments(nextLog, nextImages);
     if (error) {
       showError(error);
       return;
@@ -153,10 +147,6 @@
   imageInput.addEventListener("change", () => {
     addFiles("images", [...imageInput.files]);
     imageInput.value = "";
-  });
-  noLog.addEventListener("change", () => {
-    showError("");
-    updateFiles();
   });
   for (const [id, kind] of [
     ["#log-dropzone", "log"],
@@ -263,7 +253,6 @@
       fields.legendsPack = form.elements.legendsPack.value.trim();
     if (!form.elements.legendsPackVersion.disabled)
       fields.legendsPackVersion = form.elements.legendsPackVersion.value.trim();
-    if (noLog.checked) fields.noLog = "on";
     for (const [name, value] of Object.entries(fields)) {
       if (!value) {
         form.elements[name].value = "";
@@ -271,9 +260,9 @@
         return;
       }
     }
-    const selectedLog = activeLog(),
+    const selectedLog = log,
       selectedImages = [...images];
-    const error = validateFiles(selectedLog, selectedImages, noLog.checked);
+    const error = validateFiles(selectedLog, selectedImages);
     showError(error, true);
     if (error) return;
     const controls = [
